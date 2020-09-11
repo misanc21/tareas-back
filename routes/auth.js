@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../middleware/auth')
 const authController = require('../controllers/authController')
 const { check } = require('express-validator')
+const auth = require('../middleware/auth')
 
 router.post('/', [
     check('email', 'Agrega un email valido'),
