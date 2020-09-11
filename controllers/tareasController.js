@@ -32,7 +32,7 @@ exports.crearTarea = async (req, res) => {
 
 exports.getTareas = async (req, res) => {
     try {
-        const {proyecto} = req.body
+        const {proyecto} = req.query
         const existsProyecto = await Proyecto.findById(proyecto)
         if(!existsProyecto){
             return res.status(404).send('proyecto no encontrado')
@@ -87,7 +87,7 @@ exports.updateTarea = async (req, res) => {
 
 exports.deleteTarea = async (req, res) => {
     try {
-        const {proyecto} = req.body
+        const {proyecto} = req.query
 
         let tarea = await Tarea.findById(req.params.id)
         if(!tarea) {
