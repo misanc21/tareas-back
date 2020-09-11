@@ -17,4 +17,12 @@ router.get('/',
     tareasController.getTareas
 )
 
+router.put('/:id', 
+    auth,
+    [
+        check('nombre', 'El nombre es obligatorio').not().isEmpty()
+    ],
+    tareasController.updateTarea
+)
+
 module.exports = router

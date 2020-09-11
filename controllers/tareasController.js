@@ -48,3 +48,39 @@ exports.getTareas = async (req, res) => {
         res.status(500).send('hubo un error')
     }
 }
+
+exports.updateTarea = async (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).json({
+            errores: errors.array()
+        })
+    }
+    
+    try {
+        const {proyecto, nombre, estado} = req.body
+        let tarea = await Tarea.findById(req.params.id)
+
+        if(!tarea){
+            return res.status(401).json('No existe la tarea')
+        }
+
+        const existsProyecto = await Proyecto.findById(proyecto)
+        if(existsProyecto.creador.toString() !== req.usuario){
+            return res.status(401).json('No autorizado')
+        }
+
+        const nuevaTarea = {
+            nombre : nombre,
+            estado : estado
+        }
+        
+        tarea = await Tarea.findOneAndUpdate({_id: req.params.id}, nuevaTarea, {new: true})
+        res.json({tarea})
+
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('hubo un error')
+    }
+}
