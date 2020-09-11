@@ -25,4 +25,9 @@ router.put('/:id',
     tareasController.updateTarea
 )
 
+router.delete('/:id',
+    auth,
+    tareasController.deleteTarea
+)
+
 module.exports = router

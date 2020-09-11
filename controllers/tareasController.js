@@ -56,7 +56,7 @@ exports.updateTarea = async (req, res) => {
             errores: errors.array()
         })
     }
-    
+
     try {
         const {proyecto, nombre, estado} = req.body
         let tarea = await Tarea.findById(req.params.id)
@@ -79,6 +79,28 @@ exports.updateTarea = async (req, res) => {
         res.json({tarea})
 
 
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('hubo un error')
+    }
+}
+
+exports.deleteTarea = async (req, res) => {
+    try {
+        const {proyecto} = req.body
+
+        let tarea = await Tarea.findById(req.params.id)
+        if(!tarea) {
+            return res.status(404).json('tarea no encontrada')
+        }
+
+        const existsProyecto = await Proyecto.findById(proyecto);
+        if(existsProyecto.creador.toString() !== req.usuario){
+            return res.status(401).json('No autorizado')
+        }
+
+        await Tarea.findOneAndRemove({_id: req.params.id})
+        res.json('tarea eliminada')
     } catch (error) {
         console.log(error)
         res.status(500).send('hubo un error')
