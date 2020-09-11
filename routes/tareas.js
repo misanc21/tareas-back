@@ -12,4 +12,9 @@ router.post('/',
     tareasController.crearTarea
 )
 
+router.get('/', 
+    auth,
+    tareasController.getTareas
+)
+
 module.exports = router

@@ -29,3 +29,22 @@ exports.crearTarea = async (req, res) => {
         res.status(500).send('hubo un error')
     }
 }
+
+exports.getTareas = async (req, res) => {
+    try {
+        const {proyecto} = req.body
+        const existsProyecto = await Proyecto.findById(proyecto)
+        if(!existsProyecto){
+            return res.status(404).send('proyecto no encontrado')
+        }
+
+        if(existsProyecto.creador.toString() !== req.usuario){
+            return res.status(401).json('No autorizado')
+        }
+
+        const tareas = await Tarea.find({ proyecto })
+        res.json(tareas)
+    } catch (error) {
+        res.status(500).send('hubo un error')
+    }
+}
